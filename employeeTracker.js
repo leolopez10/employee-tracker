@@ -1,7 +1,15 @@
+//======================================
+//Dependencies
+//======================================
+
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 var cTable = require("console.table");
 require("dotenv").config();
+
+//================================================================
+//Establishing Server connections
+//================================================================
 
 var connection = mysql.createConnection({
     host: "localhost",
@@ -11,12 +19,33 @@ var connection = mysql.createConnection({
     database: "employee_DB"
 });
 
+//================================================================
+//Initiate Applications by calling async function that runs it all
+//================================================================
+
 connection.connect(function(err) {
     if (err) throw err;
     // runEmployeeTracker();
     getAllEmployees();
 });
 
+
+//================================================================
+//Create an async function that runs the program
+//================================================================
+
+async function runEmployeeTracker() {
+    try {
+
+    } catch (err) {
+        console.log(err);
+        throw err;
+    }
+}
+
+//================================================================
+//Create functions for opening questions and follow up questions
+//================================================================
 
 function openingQuestions() {
     inquirer.
@@ -37,33 +66,25 @@ function openingQuestions() {
     }])
 }
 
-async function runEmployeeTracker() {
-    try {
-
-    } catch (err) {
-        console.log(err);
-        throw err;
-    }
-}
 
 function getAllEmployees() {
     var query =
         `SELECT 
-        employee.id,
-        employee.first_name, 
-        employee.last_name, 
-        employee_role.title, 
-        department.department_name, 
-        employee_role.salary
+    employee.id,
+    employee.first_name, 
+    employee.last_name, 
+    employee_role.title, 
+    department.department_name, 
+    employee_role.salary
     FROM 
-        employee
+    employee
     INNER JOIN 
-        employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
+    employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
     INNER JOIN 
         department ON employee_role.department_id=department.id
-    ORDER BY
+        ORDER BY
         employee.id
-    ASC;`
+        ASC;`
 
     connection.query(query, function(err, res) {
         for (var i = 0; i < res.length; i++) {
@@ -79,3 +100,6 @@ function getAllEmployees() {
         }
     })
 }
+//================================================================
+//Create class files for creating an employee, department, or role
+//================================================================
