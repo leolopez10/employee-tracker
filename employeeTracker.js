@@ -4,7 +4,7 @@
 
 var mysql = require("mysql");
 var inquirer = require("inquirer");
-var cTable = require("console.table");
+// var cTable = require("console.table");
 require("dotenv").config();
 
 //================================================================
@@ -26,7 +26,7 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err;
     // runEmployeeTracker();
-    getAllEmployees();
+    openingQuestions();
 });
 
 
@@ -67,8 +67,8 @@ function openingQuestions() {
             ]
 
         }])
-        .then(function(response) {
-            switch (response.action) {
+        .then(function(answer) {
+            switch (answer.action) {
                 case "View All Employees":
                     getAllEmployees();
                     break;
@@ -99,6 +99,11 @@ function openingQuestions() {
 }
 
 
+//==============================
+//CRUD functions for SQL table
+//==============================
+
+//Select all employee Data
 function getAllEmployees() {
     var query = "SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, department.department_name, employee_role.salary FROM employee INNER JOIN employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id INNER JOIN department ON employee_role.department_id=department.id ORDER BY employee.id ASC;"
 
@@ -114,8 +119,111 @@ function getAllEmployees() {
             }
             console.table([employeeData]);
         }
+        openingQuestions();
     })
 }
+
+// Get all Departments
+function getDepartments() {
+    //Select all departments to add them as choices for the user
+    var departmentQuery = "SELECT * FROM department;"
+    connection.query(departmentQuery, function(err, res) {
+        if (err) throw err;
+        //Prompt user to choose specific department
+        inquirer
+            .prompt([{
+                name: "department",
+                type: "list",
+                message: "Choose a Department",
+                choices: function() {
+                    let departments = [];
+                    for (let i = 0; i < res.length; i++) {
+                        departments.push(res[i].department_name);
+                    }
+                    return departments
+                }
+            }]).then(function(answer) {
+
+                console.log(answer.department);
+                var query = "SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, department.department_name, employee_role.salary FROM employee INNER JOIN employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id INNER JOIN department ON employee_role.department_id=department.id WHERE department.department_name= ? ORDER BY employee.id ASC;"
+
+
+                connection.query(query, [answer.department], function(err, employeeRes) {
+                    for (let i = 0; i < employeeRes.length; i++) {
+                        console.table(employeeRes[i]);
+                    }
+
+
+                    // openingQuestions();
+                })
+
+            })
+    })
+
+}
+
+
+
+//Select all departmnets
+// let selectDepartments = function() {
+//     var query = "SELECT * FROM department;"
+
+//     connection.query(query, function(err, res) {
+//         for (let i = 0; i < res.length; i++) {
+//             let departments = {
+//                 id: res[i].id,
+//                 department: res[i].department_name
+//             }
+//             console.table([departments]);
+//         }
+//         openingQuestions();
+//     })
+// }
+
 //================================================================
 //Create class files for creating an employee, department, or role
 //================================================================
+
+deleteDepartments = () => {
+    connection.query("SELECT * FROM department", function(err, results) {
+        if (err) throw err;
+
+        inquirer
+            .prompt([{
+                type: "rawlist",
+                name: "deleteColm",
+                choices: function() {
+                    var choiceArray = [];
+                    for (var i = 0; i < results.length; i++) {
+                        choiceArray.push(results[i].name)
+                    }
+                    return choiceArray;
+                },
+                message: "Which department would you like to delete?"
+            }]).then((result) => {
+                connection.query(`SELECT id FROM department WHERE name = "${result.deleteColm}"`, function(err, departmentResults) {
+                    if (err) throw err;
+                    // console.log(employeeResults);
+                    var departmentID = departmentResults[0].id;
+                    // console.log(employeeID);
+
+                    connection.query(
+                        "DELETE FROM department WHERE ?", {
+                            id: departmentID
+                        },
+                        function(err, res) {
+                            if (err) throw err;
+                            console.log(res.affectedRows + " department deleted!\n");
+                        }
+                    )
+
+                    showAll(`department`);
+                    // start();
+                })
+
+
+            })
+
+
+    })
+};
