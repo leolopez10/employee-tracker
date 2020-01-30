@@ -173,6 +173,7 @@ let getEmployeeRoles = function() {
     })
 }
 
+//Create new department
 let createDepartment = function() {
     inquirer
         .prompt([{
@@ -190,6 +191,36 @@ let createDepartment = function() {
 
         })
 
+}
+
+//Create new role
+let createRole = function() {
+    inquirer
+        .prompt([{
+                name: "employee_title",
+                type: "input",
+                message: "What is the title of the employee role?"
+            },
+            {
+                name: "employee_salary",
+                type: "input",
+                message: "What is the employee role's salary?"
+            },
+            {
+                name: "department_id",
+                type: "input",
+                message: "What is the department id of this role?"
+            },
+        ])
+        .then(function(answer) {
+            var query = "INSERT INTO employee_role (title, salary, department_id) VALUES (?, ?, ?);"
+            connection.query(query, [answer.employee_title, answer.employee_salary, answer.department_id], function(err, res) {
+                console.table(res);
+                console.log("Successfully created new employee role");
+                openingQuestions();
+            })
+
+        })
 }
 
 //================================================================
