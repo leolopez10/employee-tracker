@@ -42,34 +42,25 @@ VALUES ("marketing");
 -- creating employee-roles
 
 INSERT INTO employee_role (title, salary, department_id)
-VALUES ("COO", 125000.00, 1);
-
-INSERT INTO employee_role (title, salary, department_id)
 VALUES ("Manager", 85000.00, 1);
 
 INSERT INTO employee_role (title, salary, department_id)
 VALUES ("employee", 50000.00, 1);
 
-INSERT INTO employee_role (title, salary, department_id)
-VALUES ("PR Lead", 85000.00, 2);
-
-INSERT INTO employee_role (title, salary, department_id)
-VALUES ("PR Associate", 50000.00, 2);
-
 
 -- creating employees
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Leo", "Lopez", 2, 1);
+VALUES ("Leo", "Lopez", 1, 1);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Blake", "Patterson", 5, null);
+VALUES ("Blake", "Patterson", 2, null);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Rodrigo", "Liques", 2, 2);
+VALUES ("Rodrigo", "Liques", 1, 2);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Alberto", "Rodriguez", 3, null);
+VALUES ("Alberto", "Rodriguez", 2, null);
 
 
 -- reads all of the employee list
@@ -135,6 +126,11 @@ ORDER BY
 	employee.id
 ASC;
 
+
+
+-- Add departments, roles, employees
+-- View departments, roles, employees
+-- Update employee roles
 
 select * from department;
 select * from employee_role;
