@@ -39,6 +39,7 @@ VALUES ("operations");
 INSERT INTO department (department_name)
 VALUES ("marketing");
 
+
 -- creating employee-roles
 
 INSERT INTO employee_role (title, salary, department_id)
@@ -47,20 +48,26 @@ VALUES ("Manager", 85000.00, 1);
 INSERT INTO employee_role (title, salary, department_id)
 VALUES ("employee", 50000.00, 1);
 
+INSERT INTO employee_role (title, salary, department_id)
+VALUES ("Manager", 85000.00, 2);
+
+INSERT INTO employee_role (title, salary, department_id)
+VALUES ("employee", 50000.00, 2);
+
 
 -- creating employees
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Leo", "Lopez", 1, 1);
+VALUES ("Leo", "Lopez", 1, null);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Blake", "Patterson", 2, null);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Rodrigo", "Liques", 1, 2);
+VALUES ("Rodrigo", "Liques", 3, null);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Alberto", "Rodriguez", 2, null);
+VALUES ("Alberto", "Rodriguez", 4, null);
 
 
 -- reads all of the employee list
@@ -72,7 +79,6 @@ SELECT
 	employee_role.title, 
 	department.department_name, 
 	employee_role.salary
-    employee_role
 FROM 
 	employee
 INNER JOIN 
@@ -82,6 +88,24 @@ INNER JOIN
 ORDER BY
 	employee.id
 ASC;
+
+
+-- trying to get things to organize in one list
+SELECT 
+	employee.id,
+	employee.first_name, 
+	employee.last_name, 
+	employee_role.title, 
+	department.department_name, 
+	employee_role.salary
+FROM 
+	employee
+INNER JOIN 
+	employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
+INNER JOIN 
+	department ON employee_role.department_id=department.id
+GROUP BY
+	first_name, last_name, title, department_name, salary;
 
 
 -- Reads all employee by department
