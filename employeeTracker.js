@@ -8,7 +8,7 @@ var cTable = require("console.table");
 require("dotenv").config();
 
 //================================================================
-//Establishing Server connections
+//Establishing database connections
 //================================================================
 
 var connection = mysql.createConnection({
@@ -50,41 +50,57 @@ async function runEmployeeTracker() {
 function openingQuestions() {
     inquirer.
     prompt([{
-        type: "rawlist",
-        message: "Navigate Employee DataBase \n What would you like to do?",
-        choices: [
-            "View all employees",
-            "View all employees by department",
-            "View all employes by manager",
-            "Add a department",
-            "Add a role",
-            "Add an employee",
-            "Update employee information",
-            "Remove employee from database",
-        ]
+            name: "action",
+            type: "rawlist",
+            message: "Navigate Employee DataBase \n What would you like to do?",
+            choices: [
+                "View All Employees",
+                "View Departments",
+                "View Employee Roles",
+                "Create New Department",
+                "Create New Employee Role",
+                "Add New Employee",
+                "Update Employee Role",
+                "EXIT"
 
-    }])
+
+            ]
+
+        }])
+        .then(function(response) {
+            switch (response.action) {
+                case "View All Employees":
+                    getAllEmployees();
+                    break;
+                case "View Departments":
+                    getDepartments();
+                    break;
+                case "View Employee Roles":
+                    getEmployeeRoles();
+                    break;
+                case "Create New Department":
+                    createDepartment();
+                    break;
+                case "Create New Employee Role":
+                    createRole();
+                    break;
+                case "Add New Employee":
+                    createEmployee();
+                    break;
+                case "Update Employee Role":
+                    updateEmployee();
+                    break;
+                case "EXIT":
+                    connection.end();
+                default:
+                    connection.end();
+            }
+        })
 }
 
 
 function getAllEmployees() {
-    var query =
-        `SELECT 
-    employee.id,
-    employee.first_name, 
-    employee.last_name, 
-    employee_role.title, 
-    department.department_name, 
-    employee_role.salary
-    FROM 
-    employee
-    INNER JOIN 
-    employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
-    INNER JOIN 
-        department ON employee_role.department_id=department.id
-        ORDER BY
-        employee.id
-        ASC;`
+    var query = "SELECT employee.id, employee.first_name, employee.last_name, employee_role.title, department.department_name, employee_role.salary FROM employee INNER JOIN employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id INNER JOIN department ON employee_role.department_id=department.id ORDER BY employee.id ASC;"
 
     connection.query(query, function(err, res) {
         for (var i = 0; i < res.length; i++) {

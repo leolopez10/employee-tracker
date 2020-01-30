@@ -59,20 +59,41 @@ VALUES ("PR Associate", 50000.00, 2);
 
 -- creating employees
 
-INSERT INTO employee (first_name, last_name, manager_id)
-VALUES ("Leo", "Lopez", 4);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Leo", "Lopez", 2, 1);
 
-INSERT INTO employee (first_name, last_name, role_id)
-VALUES ("Blake", "Patterson", 5);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Blake", "Patterson", 5, null);
 
-INSERT INTO employee (first_name, last_name, role_id)
-VALUES ("Rodrigo", "Liques", 2);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Rodrigo", "Liques", 2, 2);
 
-INSERT INTO employee (first_name, last_name, role_id)
-VALUES ("Alberto", "Rodriguez", 3);
+INSERT INTO employee (first_name, last_name, role_id, manager_id)
+VALUES ("Alberto", "Rodriguez", 3, null);
 
 
 -- reads all of the employee list
+
+SELECT 
+	employee.id,
+	employee.first_name, 
+	employee.last_name, 
+	employee_role.title, 
+	department.department_name, 
+	employee_role.salary
+    employee_role
+FROM 
+	employee
+INNER JOIN 
+	employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
+INNER JOIN 
+	department ON employee_role.department_id=department.id
+ORDER BY
+	employee.id
+ASC;
+
+
+-- Reads all employee by department
 
 SELECT 
 	employee.id,
@@ -87,10 +108,32 @@ INNER JOIN
 	employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
 INNER JOIN 
 	department ON employee_role.department_id=department.id
+WHERE
+	department.department_name="marketing"
 ORDER BY
 	employee.id
 ASC;
 
+-- View all employees by manager
+    
+SELECT 
+	employee.id,
+	employee.first_name, 
+	employee.last_name, 
+	employee_role.title, 
+	department.department_name, 
+	employee_role.salary
+FROM 
+	employee
+INNER JOIN 
+	employee_role ON employee.role_id=employee_role.id OR employee.manager_id=employee_role.id
+INNER JOIN 
+	department ON employee_role.department_id=department.id
+WHERE
+	employee_role.title="Manager"
+ORDER BY
+	employee.id
+ASC;
 
 
 select * from department;
