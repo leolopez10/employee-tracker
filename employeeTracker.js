@@ -258,50 +258,11 @@ let createEmployee = function() {
     })
 }
 
+//Update Employee Roles
+let updateEmployee = function() {
+    //UPDATE employee SET role_id=2 WHERE id=1;
+}
+
 //================================================================
 //Create class files for creating an employee, department, or role
 //================================================================
-
-// deleteDepartments = () => {
-//     connection.query("SELECT * FROM department", function(err, results) {
-//         if (err) throw err;
-
-//         inquirer
-//             .prompt([{
-//                 type: "rawlist",
-//                 name: "deleteColm",
-//                 choices: function() {
-//                     var choiceArray = [];
-//                     for (var i = 0; i < results.length; i++) {
-//                         choiceArray.push(results[i].name)
-//                     }
-//                     return choiceArray;
-//                 },
-//                 message: "Which department would you like to delete?"
-//             }]).then((result) => {
-//                 connection.query(`SELECT id FROM department WHERE name = "${result.deleteColm}"`, function(err, departmentResults) {
-//                     if (err) throw err;
-//                     // console.log(employeeResults);
-//                     var departmentID = departmentResults[0].id;
-//                     // console.log(employeeID);
-
-//                     connection.query(
-//                         "DELETE FROM department WHERE ?", {
-//                             id: departmentID
-//                         },
-//                         function(err, res) {
-//                             if (err) throw err;
-//                             console.log(res.affectedRows + " department deleted!\n");
-//                         }
-//                     )
-
-//                     showAll(`department`);
-//                     // start();
-//                 })
-
-
-//             })
-
-
-//     })
-// };

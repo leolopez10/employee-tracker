@@ -69,6 +69,8 @@ VALUES ("Rodrigo", "Liques", null, 3);
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Alberto", "Rodriguez", 4, null);
 
+-- update employees' role
+-- UPDATE employee SET role_id=2 WHERE id=1;
 
 -- reads all of the employee list
 
