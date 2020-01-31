@@ -23,8 +23,8 @@ CREATE TABLE employee (
   id INT AUTO_INCREMENT NOT NULL,
   first_name VARCHAR(30) NOT NULL,
   last_name VARCHAR(30) NOT NULL,
-  role_id INT,
-  manager_id INT,
+  role_id INT DEFAULT NULL,
+  manager_id INT DEFAULT NULL,
   PRIMARY KEY(id),
   FOREIGN KEY(role_id) REFERENCES employee_role(id),
   FOREIGN KEY(manager_id) REFERENCES employee_role(id)
@@ -57,14 +57,14 @@ VALUES ("employee", 50000.00, 2);
 
 -- creating employees
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Leo", "Lopez", 1, null);
+INSERT INTO employee (first_name, last_name, role_id)
+VALUES ("Leo", "Lopez", 1);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Blake", "Patterson", 2, null);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Rodrigo", "Liques", 3, null);
+VALUES ("Rodrigo", "Liques", null, 3);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Alberto", "Rodriguez", 4, null);

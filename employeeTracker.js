@@ -210,7 +210,7 @@ let createRole = function() {
                 name: "department_id",
                 type: "input",
                 message: "What is the department id of this role?"
-            },
+            }
         ])
         .then(function(answer) {
             var query = "INSERT INTO employee_role (title, salary, department_id) VALUES (?, ?, ?);"
@@ -221,6 +221,41 @@ let createRole = function() {
             })
 
         })
+}
+
+let createEmployee = function() {
+    roleQuery = "SELECT * FROM employee_role"
+    connection.query(roleQuery, function(err, response) {
+        if (err) throw err
+            // console.log(response);
+        inquirer
+            .prompt([{
+                    name: "first_name",
+                    type: "input",
+                    message: "What is the employee's first name?"
+                },
+                {
+                    name: "last_name",
+                    type: "input",
+                    message: "What is the employee's last name?"
+                },
+                {
+                    name: "role_id",
+                    type: "number",
+                    message: "What is the employee's role ID?"
+                }
+            ])
+            .then(function(answer) {
+                console.log(answer.role_id);
+                var query = "INSERT INTO employee (first_name, last_name, role_id) VALUES (?, ?, ?);"
+                connection.query(query, [answer.first_name, answer.last_name, answer.role_id], function(err, res) {
+                    console.table(res);
+                    console.log("Successfully added new employee into database");
+                    openingQuestions();
+                })
+
+            })
+    })
 }
 
 //================================================================
